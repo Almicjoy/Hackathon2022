@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import Flask, request, flash, url_for, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 
@@ -15,12 +17,14 @@ class Patients_DB(db.Model):
     id = db.Column('patient_id', db.Integer, primary_key=True)
     fname = db.Column('patient_fname', db.String(25))
     lname = db.Column('patient_lname', db.String(25))
+    status = db.Column('status', db.Integer)
 
 
-    def __init__(self, patient_fname, patient_lname, patient_id):
+    def __init__(self, patient_fname, patient_lname, patient_id, status):
         self.id = patient_id
         self.fname = patient_fname
         self.lname = patient_lname
+        self.status = status
 
 
 class Doctors_DB(db.Model):
@@ -60,23 +64,16 @@ class Appointments_ID(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def show_home():
+
     if request.method == 'POST':
         patient = Patients_DB(request.form['fname'], request.form['lname'],
-                              request.form['id'])
-
+                              request.form['id'], 0)
         db.session.add(patient)
         db.session.commit()
 
-        flash('Success')
-
-        return redirect(url_for('show_prof'))
+        return redirect(url_for('show_home'))
     else:
         return render_template('index.html')
-
-
-@app.route('/list_all', methods=['GET', 'POST'])
-def show_prof():
-    return render_template('index.html')
 
 
 if __name__ == '__main__':
