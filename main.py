@@ -67,11 +67,11 @@ def show_home():
         flash('Success')
 
         return redirect(url_for('show_prof'))
+    else:
+        return render_template('index.html')
 
-    return render_template('index.html')
 
-
-@app.route('/list_all')
+@app.route('/list_all', methods=['GET', 'POST'])
 def show_prof():
     return render_template('index.html')
 
