@@ -3,15 +3,41 @@
     <head>
         <h1>Patient Registration Form</h1>
         <title>Schedule Appointment</title>
+        <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
     </head>
     <body>
+        <py-script src="../PatientQueue.py"></py-script>
         <form name="Scheduler" method="POST" id="info" action="{{request.path}}">
-            <table>
-                <tr><td> First Name: </td> <td><input type="text" name="fname" placeholder="First Name" fName="" required></td></tr>
-                <tr><td> Last Name: </td><td><input type="text" name="lname" placeholder="Last Name" lName="" required></td></tr>
-                <tr><td>Patient ID: </td><td><input type="text" name="id" ID="" required></td></tr>
+            <div>
+                <table>
+                    <tr><td> First Name: </td> <td><input type="text" name="fname" placeholder="First Name" fName="" required></td></tr>
+                    <tr><td> Last Name: </td><td><input type="text" name="lname" placeholder="Last Name" lName="" required></td></tr>
+                    <tr><td> Patient ID: </td><td><input type="text" name="id" ID="" required></td></tr>
+                </table>
+                <button type="submit" form="info" formmethod="POST">Submit</button>
+            </div>
+            <div>
+                <table style="width:100%" class="table-striped">
+                    <tr style="width:70%">
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Position</th>
+                    </tr>
+                    <tr style="width:70%">
+                        <td>John Doe</td>
+                        <td>43</td>
+                        <td>1</td>
+                    </tr>
+                    <tr style="width:70%">
+                        <td>Jane Smith</td>
+                        <td>28</td>
+                        <td>2</td>
+                    </tr>
+                </div>
             </table>
-            <button type="submit" form="info" formmethod="POST">Submit</button>
         </form>
     </body>
 </html>
