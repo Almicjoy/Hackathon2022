@@ -4,7 +4,7 @@ import sqlite3
 
 patient_list = []
 
-def addPatient(patient):
+def add_patient(patient):
     patient_list.append(patient)
 
 # def removePatient():
@@ -23,10 +23,12 @@ def create_patient():
     connect = sqlite3.connect("instance/hospital.db")
     cursor = connect.cursor()
     for x in cursor.execute("SELECT * FROM patients_db"):
-        print(x)
-        # p = Patient.Patient(fname, lname, id, status)
+        str = x[1].split(" ")
+        p = Patient.Patient(str[0], str[1], x[0], 0)
+        add_patient(p)
 
 # p = removePatient()
 # pri
 
 create_patient()
+display_queue()
