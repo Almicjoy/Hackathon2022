@@ -1,4 +1,20 @@
-import "PatientQueue"
+
+let getStatus = function(status) {
+    if (status === 0) {
+        return "waiting";
+    } else if (status === 1) {
+        return "waiting";
+    } else if (status === 2) {
+        return "Ready";
+    } else if (status === 3) {
+        return "In Progress";
+    } else if (status === 4) {
+        return "On Hold";
+    } else {
+        return "Checked Out";
+    }
+}
+
 
 let addRow = function() {
 
@@ -15,16 +31,18 @@ let addRow = function() {
     
 
     var cell2 = row.insertCell(2);
-    var element2 = document.createElement("input");
-    element2.type = "text";
-    element2.name = "txtbox[]";
-    cell3.appendChild(element2);
+    cell2.innerHTML = d
 
-    var cell3 = row.insertCell(3);
-    var element3 = document.createElement("input");
-    element3.type = "checkbox";
-    element3.name="chkbox[]";
-    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(4);
+    cell4.innerHTML = rowCount + 1
+
+    var cell5 = row.insertCell(5);
+    var element5 = document.createElement("input");
+    element5.type = "checkbox";
+    element5.name="chkbox[]";
+    cell5.appendChild(element5);
+    PatientQueue.createPatient
 
 
 }
@@ -36,16 +54,20 @@ function deleteRow() {
 
         for(var i=0; i<rowCount; i++) {
             var row = table.rows[i];
-            var chkbox = row.cells[0].childNodes[0];
-            if(null != chkbox && true == chkbox.checked) {
+            var chkbox = row.cells[3].childNodes[0];
+            if (null != chkbox && true === chkbox.checked) {
                 table.deleteRow(i);
                 rowCount--;
                 i--;
             }
 
 
+        for (var i=1; i < rowCount; i++) {
+            var row = table.rows[i];
+            row.cells[2].innerHTML = i;
         }
     }catch(e) {
         alert(e);
     }
 }
+
