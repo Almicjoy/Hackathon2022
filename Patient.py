@@ -25,9 +25,9 @@ class Patient:
     def getTimeWaiting(self):
         return self.time_waiting
 
-p1 = Patient("Martha", "Martins", 222000, 1, 0)
+# p1 = Patient("Martha", "Martins", 222000, 1, 0)
 
-print(p1.__str__())
+# print(p1.__str__())
 
 
 # form = cgi.FieldStorage()
