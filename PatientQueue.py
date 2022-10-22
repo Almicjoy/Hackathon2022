@@ -17,10 +17,13 @@ def create_patient():
     connect = sqlite3.connect("instance/hospital.db")
     cursor = connect.cursor()
     for x in cursor.execute("SELECT * FROM patients_db"):
-        if x[0] == 0:
-            str = x[1].split(" ")
-            p = Patient.Patient(str[0], str[1], x[0], 0)
-            add_patient(p)
+        print(x[2])
+        p = Patient.Patient(x[1], x[2], x[0], 0)
+        add_patient(p)
+
+
+def get_num_patients():
+    return len(patient_list)  
         
 
 create_patient()
