@@ -58,7 +58,7 @@ class Appointments_ID(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def show_home():
     if request.method == 'POST':
-        patient = Patients_DB((request.form['fName'] + " " + request.form['lName']),
+        patient = Patients_DB((request.form['fname'] + " " + request.form['lname']),
                               request.form['id'])
 
         db.session.add(patient)
