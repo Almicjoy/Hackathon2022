@@ -23,7 +23,7 @@ def create_patient():
     connect = sqlite3.connect("instance/hospital.db")
     cursor = connect.cursor()
     for x in cursor.execute("SELECT * FROM patients_db"):
-        print(x[0])
+        print(x)
         # p = Patient.Patient(fname, lname, id, status)
 
 # p = removePatient()

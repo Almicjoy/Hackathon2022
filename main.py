@@ -13,11 +13,14 @@ statuses = {0: 'waiting', 1: 'ready', 2: 'in_progress', 3: 'on_hold', 4: 'checke
 
 class Patients_DB(db.Model):
     id = db.Column('patient_id', db.Integer, primary_key=True)
-    name = db.Column('patient_name', db.String(25))
+    fname = db.Column('patient_fname', db.String(25))
+    lname = db.Column('patient_lname', db.String(25))
 
-    def __init__(self, patient_name, patient_id):
+
+    def __init__(self, patient_fname, patient_lname, patient_id):
         self.id = patient_id
-        self.name = patient_name
+        self.fname = patient_fname
+        self.lname = patient_lname
 
 
 class Doctors_DB(db.Model):
@@ -58,7 +61,7 @@ class Appointments_ID(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def show_home():
     if request.method == 'POST':
-        patient = Patients_DB((request.form['fname'] + " " + request.form['lname']),
+        patient = Patients_DB(request.form['fname'], request.form['lname'],
                               request.form['id'])
 
         db.session.add(patient)
@@ -67,11 +70,11 @@ def show_home():
         flash('Success')
 
         return redirect(url_for('show_prof'))
+    else:
+        return render_template('index.html')
 
-    return render_template('index.html')
 
-
-@app.route('/list_all')
+@app.route('/list_all', methods=['GET', 'POST'])
 def show_prof():
     return render_template('index.html')
 
