@@ -7,9 +7,9 @@
     <body>
         <form name="Scheduler" method="POST" id="info" action="{{requst.path}}">
             <table>
-                <tr><td> First Name: </td> <td><input type="text" id="fName" placeholder="First Name" fName="" required></td></tr>
-                <tr><td> Last Name: </td><td><input type="text" id="lName" placeholder="Last Name" lName="" required></td></tr>
-                <tr><td>Patient ID: </td><td><input type="text" id="id" ID="" required></td></tr>
+                <tr><td> First Name: </td> <td><input type="text" id="fName" name="fname" placeholder="First Name" fName="" required></td></tr>
+                <tr><td> Last Name: </td><td><input type="text" id="lName" name="lname" placeholder="Last Name" lName="" required></td></tr>
+                <tr><td>Patient ID: </td><td><input type="text" id="id" name="id" ID="" required></td></tr>
             </table>
             <button type="submit" form="info" formmethod="POST">Submit</button>
         </form>
