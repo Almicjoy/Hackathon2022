@@ -1,18 +1,10 @@
 
-let getStatus = function(status) {
-    if (status === 0) {
-        return "waiting";
-    } else if (status === 1) {
-        return "waiting";
-    } else if (status === 2) {
-        return "Ready";
-    } else if (status === 3) {
-        return "In Progress";
-    } else if (status === 4) {
-        return "On Hold";
-    } else {
-        return "Checked Out";
-    }
+
+var statuses = ["Waiting", "Ready", "In Progress", "On Hold", "Checked Out"]
+var rooms = []
+
+for (var i = 0; i < 3; i++) {
+    rooms[i] = true
 }
 
 
@@ -28,46 +20,58 @@ let addRow = function() {
 
     var cell1 = row.insertCell(1);
     cell1.innerHTML = document.getElementById("id").value;
-    
 
     var cell2 = row.insertCell(2);
-    cell2.innerHTML = d
+    var dropdown = document.createElement("select");
+
+    for(var i = 0; i < statuses.length; i++) {
+        var opt = document.createElement("option")
+        opt.text = statuses[i]
+        dropdown.add(opt)
+    }
+    cell2.appendChild(dropdown)
+
+    var cell4 = row.insertCell(3);
+    var found_room = false
+    for (var x = 0; x < rooms.length; x++) {
+        if (rooms[x]) {
+            found_room = true
+            rooms[x] = false
+            cell4.innerHTML = "Room " + (x + 1);
+            break;
+        }
+    }
 
 
-    var cell4 = row.insertCell(4);
-    cell4.innerHTML = rowCount + 1
-
-    var cell5 = row.insertCell(5);
-    var element5 = document.createElement("input");
-    element5.type = "checkbox";
-    element5.name="chkbox[]";
-    cell5.appendChild(element5);
+    var cell3 = row.insertCell(4);
+    var element3 = document.createElement("input");
+    element3.type = "checkbox";
+    element3.name="chkbox[]";
+    cell3.appendChild(element3);
     PatientQueue.createPatient
 
 
 }
 
-function deleteRow() {
+let deleteRow = function() {
     try {
         var table = document.getElementById("data");
         var rowCount = table.rows.length;
 
         for(var i=0; i<rowCount; i++) {
             var row = table.rows[i];
-            var chkbox = row.cells[3].childNodes[0];
+            var chkbox = row.cells[4].childNodes[0];
             if (null != chkbox && true === chkbox.checked) {
                 table.deleteRow(i);
                 rowCount--;
                 i--;
             }
-
-
-        for (var i=1; i < rowCount; i++) {
-            var row = table.rows[i];
-            row.cells[2].innerHTML = i;
         }
+
     }catch(e) {
         alert(e);
     }
+
+    return false;
 }
 
