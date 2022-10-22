@@ -1,9 +1,9 @@
-import SQLAlchemy as SQLAlchemy
 from flask import Flask, request, flash, url_for, redirect, render_template
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "hospital.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///hospital.db"
 
 db = SQLAlchemy(app)
 
@@ -11,9 +11,9 @@ statuses = {0: 'waiting', 1: 'ready', 2: 'in_progress', 3: 'on_hold', 4: 'checke
 
 
 class Patient_DB():
-    id = db.Column('patient_id', db.integer, primary_key=True)
+    id = db.Column('patient_id', db.Integer, primary_key=True)
     name = db.Column('patient_name', db.String(25))
-    patient_status = db.Column('patient_status', db.integer)
+    patient_status = db.Column('patient_status', db.Integer)
     time_waiting = db.Column('time_waiting', db.String(8))
 
     def __init__(self, patient_id, patient_name, patient_status, time_waiting):
@@ -24,7 +24,7 @@ class Patient_DB():
 
 
 class Doctor_DB():
-    id = db.Column('dr_id', db.integer, primary_key=True)
+    id = db.Column('dr_id', db.Integer, primary_key=True)
     name = db.Column('dr_name', db.String(20))
     status = db.Column('dr_status', db.Boolean)
 
@@ -42,11 +42,11 @@ class Room_DB():
         self.room_status = room_status
 
 class Appointment_ID():
-    patient_id = db.Column('patient_id', db.integer)
-    dr_id = db.Column('dr_id', db.integer)
-    room_number = db.Column('room_number', db.integer)
+    patient_id = db.Column('patient_id', db.Integer)
+    dr_id = db.Column('dr_id', db.Integer)
+    room_number = db.Column('room_number', db.Integer)
     desc = db.Column('description', db.String(500))
-    app_id = db.Column('app_id', db.integer)
+    app_id = db.Column('app_id', db.Integer)
 
     def __init__(self, p_id, dr_id, room_number, desc, app_id):
         self.patient_id = p_id
