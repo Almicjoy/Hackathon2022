@@ -1,3 +1,5 @@
+import "PatientQueue"
+
 let addRow = function() {
 
     var table = document.getElementById("data");
@@ -10,6 +12,7 @@ let addRow = function() {
 
     var cell1 = row.insertCell(1);
     cell1.innerHTML = document.getElementById("id").value;
+    
 
     var cell2 = row.insertCell(2);
     var element2 = document.createElement("input");
@@ -22,6 +25,7 @@ let addRow = function() {
     element3.type = "checkbox";
     element3.name="chkbox[]";
     cell3.appendChild(element3);
+    PatientQueue.createPatient
 
 
 }
