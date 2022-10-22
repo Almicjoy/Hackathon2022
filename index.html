@@ -17,24 +17,15 @@
                     <tr><td> Patient ID: </td><td><input type="text" id="id" ID="" required></td></tr>
                 </table>
                 <button type="button" id="submit" onclick="addRow()">Submit</button>
+                <button type="button" id="delete" onclick="deleteRow()">Delete Selected Appointments</button>
             </div>
             <div>
                 <table style="width:100%" class="table-striped", id="data">
-                    <tr style="width:70%">
-                        <th>Name</th>
-                        <th>ID</th>
-                        <th>Position</th>
-                    </tr>
-                    <tr style="width:70%">
-                        <td>John Doe</td>
-                        <td>43</td>
-                        <td>1</td>
-                    </tr>
-                    <tr style="width:70%">
-                        <td>Jane Smith</td>
-                        <td>28</td>
-                        <td>2</td>
-                    </tr>
+                    <th>Full Name</th>
+                    <th>Patient ID</th>
+                    <th>Position in Queue </th>
+                    <th>Delete</th>
+                </table>
                 </div>
             </table>
         </form>
