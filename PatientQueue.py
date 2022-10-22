@@ -40,14 +40,3 @@ def get_num_patients():
 create_patient()
 display_queue()
 
-# let fname = document.getElementById("fname").value
-#     let lname = document.getElementById("lname").value
-#     let id = document.getElementById("id").value
-#     let status = document.getElementById("status").value
-    
-#     if (Patient.patientListSize() > 0 && !Patient.patientExists(Patient.patient_list, id)){
-#         Patient.createPatient(fname, lname, id, status)
-#     }
-#     else {
-#         alert("ID already exists");
-#     }

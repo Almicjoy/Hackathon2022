@@ -34,8 +34,10 @@ class Patient {
     }
     patientExists(p, id) {
         for (var i = 0; i < this.patientListSize(); i++) {
-            if (p.getID() == id){
+            if (p[i].id === id){
+                alert("patient exists")
                 return true
+                
             }
         }
         return false
