@@ -1,3 +1,4 @@
+import cgi
 class Patient:
     def __init__(self, fname, lname, patientID, status, time_waiting):
         self.fname = fname
@@ -13,3 +14,6 @@ class Patient:
 p1 = Patient("Martha", "Martins", 222000, 1, 0)
 
 print(p1.__str__())
+
+form = cgi.FieldStorage()
+fname = form.getvalue('fname')
