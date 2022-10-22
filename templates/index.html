@@ -5,7 +5,7 @@
         <title>Schedule Appointment</title>
     </head>
     <body>
-        <form name="Scheduler" method="POST" id="info" action="../Patient.py">
+        <form name="Scheduler" method="POST" id="info" action="{{requst.path}}">
             <table>
                 <tr><td> First Name: </td> <td><input type="text" id="fName" name="fname" placeholder="First Name" fName="" required></td></tr>
                 <tr><td> Last Name: </td><td><input type="text" id="lName" name="lname" placeholder="Last Name" lName="" required></td></tr>
