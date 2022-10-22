@@ -1,4 +1,5 @@
 import Patient
+import main
 
 patient_list = []
 
@@ -10,13 +11,15 @@ def removePatient():
     patient_list.pop(0)
     return p
 
-p = Patient.Patient("Some", "Dude", 22222, 0, 0)
-p2 = Patient.Patient("Martha", "Martins", 34343, 0, 0)
 
-addPatient(p)
-addPatient(p2)
+
 
 def display_queue():
     for patient in patient_list:
         print(patient.__str__())
-        
+
+def create_patient(fname, lname, id, status):
+    p = Patient.Patient(fname, lname, id, status)
+
+p = removePatient()
+print(p)
