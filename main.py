@@ -4,26 +4,23 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///hospital.db"
+app.config['SECRET_KEY'] = "12345"
 
 db = SQLAlchemy(app)
 
 statuses = {0: 'waiting', 1: 'ready', 2: 'in_progress', 3: 'on_hold', 4: 'checked_out'}
 
 
-class Patient_DB():
+class Patients_DB(db.Model):
     id = db.Column('patient_id', db.Integer, primary_key=True)
     name = db.Column('patient_name', db.String(25))
-    patient_status = db.Column('patient_status', db.Integer)
-    time_waiting = db.Column('time_waiting', db.String(8))
 
-    def __init__(self, patient_id, patient_name, patient_status, time_waiting):
+    def __init__(self, patient_name, patient_id):
         self.id = patient_id
         self.name = patient_name
-        self.patient_status = patient_status
-        self.time_waiting = time_waiting
 
 
-class Doctor_DB():
+class Doctors_DB(db.Model):
     id = db.Column('dr_id', db.Integer, primary_key=True)
     name = db.Column('dr_name', db.String(20))
     status = db.Column('dr_status', db.Boolean)
@@ -33,20 +30,22 @@ class Doctor_DB():
         self.name = dr_name
         self.status = dr_status
 
-class Room_DB():
-    number = db.Column('room_id', primary_key=True)
+
+class Rooms_DB(db.Model):
+    number = db.Column('room_id', db.Integer, primary_key=True)
     room_status = db.Column('room_status', db.Boolean)
 
     def __init__(self, room_number, room_status):
         self.number = room_number
         self.room_status = room_status
 
-class Appointment_ID():
+
+class Appointments_ID(db.Model):
     patient_id = db.Column('patient_id', db.Integer)
     dr_id = db.Column('dr_id', db.Integer)
     room_number = db.Column('room_number', db.Integer)
     desc = db.Column('description', db.String(500))
-    app_id = db.Column('app_id', db.Integer)
+    app_id = db.Column('app_id', db.Integer, primary_key=True)
 
     def __init__(self, p_id, dr_id, room_number, desc, app_id):
         self.patient_id = p_id
@@ -56,17 +55,28 @@ class Appointment_ID():
         self.app_id = app_id
 
 
-
-
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def show_home():
-    return render_template('index.html', name="Aaliyah")
+    if request.method == 'POST':
+        patient = Patients_DB((request.form['fName'] + " " + request.form['lName']),
+                              request.form['id'])
+
+        db.session.add(patient)
+        db.session.commit()
+
+        flash('Success')
+
+        return redirect(url_for('show_prof'))
+
+    return render_template('index.html')
 
 
-@app.route('/profile')
+@app.route('/list_all')
 def show_prof():
-    pass
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
