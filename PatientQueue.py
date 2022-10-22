@@ -19,3 +19,4 @@ addPatient(p2)
 def display_queue():
     for patient in patient_list:
         print(patient.__str__())
+        
