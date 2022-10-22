@@ -66,6 +66,14 @@ class Appointments_ID(db.Model):
 def show_home():
 
     if request.method == 'POST':
+        id = request.form['id']
+        connect = connect = sqlite3.connect("instance/hospital.db")
+        cursor = connect.cursor()
+        for x in cursor.execute("SELECT * FROM patients_db"):
+            if id == x[0]:
+                status = 0
+                num_rows_updated = Patients_DB.query.filter_by(id=x[0]).update(dict(status=0))
+        
         patient = Patients_DB(request.form['fname'], request.form['lname'],
                               request.form['id'], 0)
         db.session.add(patient)

@@ -18,9 +18,20 @@ def create_patient():
     cursor = connect.cursor()
     for x in cursor.execute("SELECT * FROM patients_db"):
         print(x[2])
-        p = Patient.Patient(x[1], x[2], x[0], 0)
+        p = Patient.Patient(x[1], x[2], x[0], x[3])
         add_patient(p)
 
+def patientExists(id):
+    for patient in patient_list:
+        if patient.getID() == id:
+            return True
+    return False
+
+def getPatient(id):
+    for patient in patient_list:
+        if patient.getID() == id:
+            return patient
+    return "Error: No patient with this ID found"
 
 def get_num_patients():
     return len(patient_list)  
