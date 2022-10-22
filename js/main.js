@@ -1,4 +1,8 @@
-import "PatientQueue"
+
+let getStatus = function(status) {
+    if status ===
+}
+
 
 let addRow = function() {
 
@@ -13,15 +17,18 @@ let addRow = function() {
     var cell1 = row.insertCell(1);
     cell1.innerHTML = document.getElementById("id").value;
     
-
     var cell2 = row.insertCell(2);
-    cell2.innerHTML = rowCount
+    cell2.innerHTML = d
 
-    var cell3 = row.insertCell(3);
-    var element3 = document.createElement("input");
-    element3.type = "checkbox";
-    element3.name="chkbox[]";
-    cell3.appendChild(element3);
+
+    var cell4 = row.insertCell(4);
+    cell4.innerHTML = rowCount + 1
+
+    var cell5 = row.insertCell(5);
+    var element5 = document.createElement("input");
+    element5.type = "checkbox";
+    element5.name="chkbox[]";
+    cell5.appendChild(element5);
     PatientQueue.createPatient
 
 
@@ -42,9 +49,9 @@ let deleteRow = function() {
             }
         }
 
-        for (var i=0; i < rowCount; i++) {
+        for (var i=1; i < rowCount; i++) {
             var row = table.rows[i];
-            row.cells[2].innerHTML = i + 1;
+            row.cells[2].innerHTML = i;
         }
     }catch(e) {
         alert(e);
