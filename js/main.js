@@ -25,7 +25,6 @@ let addRow = function() {
     element3.type = "checkbox";
     element3.name="chkbox[]";
     cell3.appendChild(element3);
-    PatientQueue.createPatient
 
 
 }

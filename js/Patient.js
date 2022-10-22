@@ -29,6 +29,17 @@ class Patient {
         let patient = Patient(fname, lname, id, status)
         addPatient(patient)
     }
+    patientListSize() {
+        return this.patient_list.length
+    }
+    patientExists(p, id) {
+        for (var i = 0; i < this.patientListSize(); i++) {
+            if (p.getID() == id){
+                return true
+            }
+        }
+        return false
+    }
     
 
 }
