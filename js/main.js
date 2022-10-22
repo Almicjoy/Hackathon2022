@@ -1,6 +1,18 @@
 
 let getStatus = function(status) {
-    if status ===
+    if (status === 0) {
+        return "waiting";
+    } else if (status === 1) {
+        return "waiting";
+    } else if (status === 2) {
+        return "Ready";
+    } else if (status === 3) {
+        return "In Progress";
+    } else if (status === 4) {
+        return "On Hold";
+    } else {
+        return "Checked Out";
+    }
 }
 
 
