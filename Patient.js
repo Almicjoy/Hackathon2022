@@ -18,6 +18,17 @@ class Patient {
     get status () {
         return this.status
     }
+
+    patient_list = []
+
+    addPatient (patient){
+        patient_list.push(patient)
+    }
+
+    createPatient (fname, lname, id, status) {
+        let patient = Patient(fname, lname, id, status)
+        addPatient(patient)
+    }
     
 
 }
