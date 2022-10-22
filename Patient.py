@@ -21,14 +21,3 @@ class Patient:
 
     def getPatientStatus(self):
         return self.status
-    
-
-# p1 = Patient("Martha", "Martins", 222000, 1, 0)
-
-# print(p1.__str__())
-
-
-# form = cgi.FieldStorage()
-# fname = form.getvalue('fname')
-# lname = form.getvalue('lname')
-# id = form.getvalue('id')
