@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h1>Patient Queue</h1>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.css') }}">
+    </head>
+    <body>
+        <h3>
+            <a href="{{ url_for('show_waiting') }}">SGMC Patient Queuing System</a>  
+        </h3>
+        <hr/>
+        {%- for message in get_flashed_messages() %}
+         {{ message }}
+        {%- endfor %}
+        
+        <!-- <form name="Scheduler" method="POST" id="info" action="{{ request.path }}">
+            <table>
+                <tr><td> First Name: </td> <td><input type="text" id="fname" name="fname" placeholder="First Name" fName="" required></td></tr>
+                <tr><td> Last Name: </td><td><input type="text" id="lname" name="lname" placeholder="Last Name" lName="" required></td></tr>
+                <tr><td> Patient ID: </td><td><input type="text" id="id" name="id" ID="" required></td></tr>
+            </table>
+            <input type="submit" value="Submit"/>
+        </form> -->
+
+        <div class="column">
+            <h4>Waiting Patients (<a href = "{{ url_for('new') }}">ADD</a>)</h4>
+     
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.fname }}</td>
+                        <td>{{ patient.lname }}</td>
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="column">
+            <h4>Ready Patients</h4>
+     
+            <table>
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    {% for ready_patient in ready_patients %}
+                    <tr>
+                        <td>{{ ready_patient.fname }}</td>
+                        <td>{{ ready_patient.lname }}</td>
+                        <td>{{ ready_patient.id }}</td>
+                        <td>{{ ready_patient.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

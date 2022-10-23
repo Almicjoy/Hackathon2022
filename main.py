@@ -62,27 +62,44 @@ class Appointments_ID(db.Model):
         self.app_id = app_id
 
 
-@app.route('/', methods=['GET', 'POST'])
-def show_home():
-
+@app.route('/new', methods=['GET', 'POST'])
+def new():
     if request.method == 'POST':
-        id = request.form['id']
-        connect = connect = sqlite3.connect("instance/hospital.db")
-        cursor = connect.cursor()
-        for x in cursor.execute("SELECT * FROM patients_db"):
-            if id == x[0]:
-                status = 0
-                num_rows_updated = Patients_DB.query.filter_by(id=x[0]).update(dict(status=0))
-        
-        patient = Patients_DB(request.form['fname'], request.form['lname'],
-                              request.form['id'], 0)
-        db.session.add(patient)
-        db.session.commit()
-
-        return redirect(url_for('show_home'))
+        if not request.form['fname'] or not request.form['lname'] or not request.form['id']:
+            flash('Please enter all the fields', 'error')
+        else:
+            retrieved_id = request.form['id']
+            # if db.session.query.(Patients_DB.id).filter(Patients_DB.id == retrieved_id).count() > 0:
+            if Patients_DB.query.filter_by(id = retrieved_id).count() > 0:
+                Patients_DB.query.filter_by(id = retrieved_id).update(dict(status = 0))
+                db.session.commit()
+                flash('ID already exists in Database. Patient added to Waiting Queue')
+                
+            else:
+                patient = Patients_DB(request.form['fname'], request.form['lname'], request.form['id'], 0)
+                db.session.add(patient)
+                db.session.commit()
+                flash('Record was successfully added. Patient added to Waiting Queue')
+                
+            return redirect(url_for('show_waiting'))
     else:
         return render_template('index.html')
 
+@app.route('/')
+def show_waiting():
+    return render_template('show_queues.html', patients = Patients_DB.query.filter_by(status = 0).all())
+
+def show_ready():
+    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 1).all())
+
+def show_in_progress():
+    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 2).all())
+
+def show_on_hold():
+    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 3).all())
+
+def show_checked_out():
+    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 4).all())
 
 if __name__ == '__main__':
     with app.app_context():

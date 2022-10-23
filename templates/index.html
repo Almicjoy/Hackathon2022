@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <h1>Patient Registration Form</h1>
+        <title>Schedule Appointment</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.css') }}">
+    </head>
+    <body>
+        <h3>
+            <a href="{{ url_for('show_waiting') }}">SGMC Patient Queuing System</a>  
+        </h3>
+        <hr/>
+        {%- for category, message in get_flashed_messages(with_categories = true) %}
+            <div class = "alert alert-danger">
+                {{ message }}
+            </div>
+        {%- endfor %}
+        <form name="Scheduler" method="POST" id="info" action="{{ request.path }}">
+                <table>
+                    <tr><td> First Name: </td> <td><input type="text" id="fname" name="fname" placeholder="First Name" fName="" required></td></tr>
+                    <tr><td> Last Name: </td><td><input type="text" id="lname" name="lname" placeholder="Last Name" lName="" required></td></tr>
+                    <tr><td> Patient ID: </td><td><input type="text" id="id" name="id" ID="" required></td></tr>
+                </table>
+                <input type="submit" value="Submit"/>
+            
+        </form>
+    </body>
+</html>
