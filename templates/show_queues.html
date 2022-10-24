@@ -25,7 +25,7 @@
 
         <div class="column">
             <h4>Waiting Patients (<a href = "{{ url_for('new') }}">ADD</a>)</h4>
-     
+            <input type="submit" name="ready_button" value="move">
             <table>
                 <thead>
                     <tr>
@@ -33,6 +33,7 @@
                         <th>Last Name</th>
                         <th>ID</th>
                         <th>Status</th>
+                        <th>Position</th>
                     </tr>
                 </thead>
             
@@ -43,6 +44,7 @@
                         <td>{{ patient.lname }}</td>
                         <td>{{ patient.id }}</td>
                         <td>{{ patient.status }}</td>
+                        <td>{{ patient.position }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
