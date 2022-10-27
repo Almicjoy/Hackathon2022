@@ -15,14 +15,32 @@
 
 .column {
   float: left;
-  width: 25%;
+  width: 30%;
   /* border: 1px solid gray */
 }
 
 th {
-  padding: 2%;
-  width: 5%;
+  padding-left: 2%;
+  width: 10%;
 }
 td, h4 {
-  padding: 2%;
+  padding-left: 2%;
+}
+.ready {
+  float: left;
+}
+.ready_form {
+  float: right;
+}
+.shift {
+  float: right;
+  display: flex;
+}
+.shift_pos {
+  width: 20%;
+  height: 2%;
+  font-size: x-small;
+}
+.position {
+  width: 40%;
 }

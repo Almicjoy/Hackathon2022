@@ -21,3 +21,5 @@ class Patient:
 
     def getPatientStatus(self):
         return self.status
+
+    

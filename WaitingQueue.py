@@ -7,7 +7,8 @@ def add_patient(patient):
     patient_list.append(patient)
 
 def remove_patient():
-    patient_list.pop(0)
+    patient = patient_list.pop(0)
+    return patient
 
 def display_queue():
     for patient in patient_list:
@@ -29,11 +30,17 @@ def getPatient(id):
 def get_pos(id):
     for i, patient in enumerate(patient_list):
         if patient.getPatientID() == id:
-            return i + 1
+            j = i + 1
+            return j
     return "Error: No patient with this ID found"
 
 def get_num_patients():
     return len(patient_list)  
-        
+
+def is_empty():
+    if bool(patient_list):
+        return False
+    else:
+        return True     
 
 

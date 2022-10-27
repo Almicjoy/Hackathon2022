@@ -1,5 +1,6 @@
 import sqlite3
 import WaitingQueue
+import ReadyQueue
 import Patient
 
 from flask import Flask, request, flash, url_for, redirect, render_template
@@ -21,14 +22,16 @@ class Patients_DB(db.Model):
     lname = db.Column('patient_lname', db.String(25))
     status = db.Column('status', db.Integer)
     position = db.Column('position', db.Integer)
+    room = db.Column('room', db.Integer)
 
 
-    def __init__(self, patient_fname, patient_lname, patient_id, status, position):
+    def __init__(self, patient_fname, patient_lname, patient_id, status, position, room):
         self.id = patient_id
         self.fname = patient_fname
         self.lname = patient_lname
         self.status = status
         self.position = position
+        self.room = room
 
 
 class Doctors_DB(db.Model):
@@ -43,11 +46,11 @@ class Doctors_DB(db.Model):
 
 
 class Rooms_DB(db.Model):
-    number = db.Column('room_id', db.Integer, primary_key=True)
+    room_number = db.Column('room_id', db.Integer, primary_key=True)
     room_status = db.Column('room_status', db.Boolean)
 
     def __init__(self, room_number, room_status):
-        self.number = room_number
+        self.room_number = room_number
         self.room_status = room_status
 
 
@@ -75,7 +78,6 @@ def new():
             patient = Patient.Patient(request.form['fname'], request.form['lname'], request.form['id'], 0)
             WaitingQueue.add_patient(patient)
             retrieved_id = request.form['id']
-            # if db.session.query.(Patients_DB.id).filter(Patients_DB.id == retrieved_id).count() > 0:
             if Patients_DB.query.filter_by(id = retrieved_id).count() > 0:
                 Patients_DB.query.filter_by(id = retrieved_id).update(dict(status = 0))
                 Patients_DB.query.filter_by(id = retrieved_id).update(dict(position = WaitingQueue.get_pos(retrieved_id)))
@@ -83,7 +85,7 @@ def new():
                 flash('ID already exists in Database. Patient added to Waiting Queue')
                 
             else:
-                patient = Patients_DB(request.form['fname'], request.form['lname'], request.form['id'], 0, WaitingQueue.get_pos(retrieved_id))
+                patient = Patients_DB(request.form['fname'], request.form['lname'], request.form['id'], 0, WaitingQueue.get_pos(retrieved_id), 0)
                 db.session.add(patient)
                 db.session.commit()
                 flash('Record was successfully added. Patient added to Waiting Queue')
@@ -91,32 +93,65 @@ def new():
             return redirect(url_for('show_waiting'))
     else:
         return render_template('index.html')
-
-def move_to_ready():
-    if 'ready_button' in request.form:
-        patient = WaitingQueue.remove_patient()
-        Patients_DB.query.filter_by(id = patient.getPatientID).update(dict(status = 1))
-        Patients_DB.query.filter_by(status = 0).update(dict(position = Patients_DB.position - 1))
-        Patients_DB.query.filter_by(id = patient.getPatientID).update(dict(position = ReadyQueue.get_pos(patient.getPatientID)))
-        ReadyQueue.add_patient(patient)
-        db.session.commit()
     
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def show_waiting():
-    return render_template('show_queues.html', patients = Patients_DB.query.filter_by(status = 0).all())
+    if request.method == 'POST':
+        if request.form.get('ready_button') == 'Ready':
+            if WaitingQueue.is_empty():
+                flash('Queue is empty!')
+            else:
+                patient = WaitingQueue.remove_patient()
+                ReadyQueue.add_patient(patient)
+                Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(status = 1))
+                Patients_DB.query.filter_by(status = 0).update(dict(position = Patients_DB.position - 1))
+                Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = ReadyQueue.get_pos(patient.getPatientID())))
+                db.session.commit()
+        
+        if request.form.get('pos') == '+':
+                pos = request.form['position']
+                int_pos = int(pos)
+                if int_pos == 1:
+                    flash('Patient is at the top of the queue')
+                else:
+                    WaitingQueue.patient_list[int_pos-2], WaitingQueue.patient_list[int_pos-1] = WaitingQueue.patient_list[int_pos-1], WaitingQueue.patient_list[int_pos-2]
+                    for patient in WaitingQueue.patient_list:
+                        Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = WaitingQueue.get_pos(patient.getPatientID())))
+                        db.session.commit()
 
-@app.route('/')
-def show_ready():
-    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 1).all())
+        if request.form.get('pos') == '-':
+                pos = request.form['position']
+                int_pos = int(pos)
+                if int_pos == WaitingQueue.get_num_patients():
+                    flash('Patient is at the bottom of the queue')
+                else:
+                    WaitingQueue.patient_list[int_pos-1], WaitingQueue.patient_list[int_pos] = WaitingQueue.patient_list[int_pos], WaitingQueue.patient_list[int_pos-1]
+                    for patient in WaitingQueue.patient_list:
+                        Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = WaitingQueue.get_pos(patient.getPatientID())))
+                        db.session.commit()
+    
+    return render_template('show_queues.html', waiting_patients = waiting(), ready_patients = ready())
 
-def show_in_progress():
-    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 2).all())
+def waiting():
+    waiting_patients = Patients_DB.query.filter_by(status = 0).order_by(Patients_DB.position)
+    return waiting_patients
 
-def show_on_hold():
-    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 3).all())
+def ready():
+    ready_patients = Patients_DB.query.filter_by(status = 1).order_by(Patients_DB.position)
+    return ready_patients
 
-def show_checked_out():
-    return render_template('show_queues.html', ready_patients = Patients_DB.query.filter_by(status = 4).all())
+def in_progress():
+    in_progress_patients = Patients_DB.query.filter_by(status = 2).all()
+    return in_progress_patients
+
+def on_hold():
+    on_hold_patients = Patients_DB.query.filter_by(status = 3).all()
+    return on_hold_patients
+
+def checked_out():
+    checked_out_patients = Patients_DB.query.filter_by(status = 4).all()
+    return checked_out_patients
+    
 
 if __name__ == '__main__':
     with app.app_context():
