@@ -4,14 +4,27 @@
         <h1>Patient Queue</h1>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.css') }}">
+        <script type="text/javascript">window.setTimeout("document.getElementById('flash_messages').style.display='none';", 2000);</script>
     </head>
     <body>
         <h3>
             <a href="{{ url_for('show_waiting') }}">SGMC Patient Queuing System</a>  
         </h3>
         <hr/>
+        <div class="room_stuff">
+            <div class="room_object">
+                <a href = "{{url_for('room')}}">Add Room</a>
+            </div>
+            {%- for room in rooms %}
+            <div class="room_object">
+                {{room.room_number}}
+            </div>
+            {%- endfor %}
+        </div>
         {%- for message in get_flashed_messages() %}
-         {{ message }}
+        <div class = "flash_messages" id="flash_messages">
+            {{ message }}
+        </div>
         {%- endfor %}
 
         <div class="column">
@@ -26,7 +39,6 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>ID</th>
-                        <th>Status</th>
                         <th>Position</th>
                     </tr>
                 </thead>
@@ -64,7 +76,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>ID</th>
-                        <th>Position</th>
+                        <th>Room</th>
                     </tr>
                 </thead>
             
@@ -74,8 +86,7 @@
                         <td>{{ ready_patient.fname }}</td>
                         <td>{{ ready_patient.lname }}</td>
                         <td>{{ ready_patient.id }}</td>
-                        <td>{{ ready_patient.status }}</td>
-                        <td>{{ ready_patient.position }}</td>
+                        <td>{{ ready_patient.room }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

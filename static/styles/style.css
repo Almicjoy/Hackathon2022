@@ -14,6 +14,7 @@
 }
 
 .column {
+  padding-top: 3%;
   float: left;
   width: 30%;
   /* border: 1px solid gray */
@@ -43,4 +44,25 @@ td, h4 {
 }
 .position {
   width: 40%;
+}
+.flash_messages {
+  position: absolute;
+  background-color: rgba(233, 92, 87, 0.549);
+  display: block;
+  float: none;
+  color: black;
+  padding: 3%;
+  top:10%;
+  left:40%;
+}
+.room_stuff {
+  display: block;
+  padding-left: 1%;
+}
+.room_object {
+  display: inline;
+  padding:1%;
+  border: 2px solid gray;
+  border-radius: 5%;
+  background-color: rgb(234, 230, 230);
 }

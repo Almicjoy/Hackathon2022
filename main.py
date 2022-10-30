@@ -1,7 +1,6 @@
-import sqlite3
 import WaitingQueue
-import ReadyQueue
 import Patient
+import Room
 
 from flask import Flask, request, flash, url_for, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -94,18 +93,39 @@ def new():
     else:
         return render_template('index.html')
     
+@app.route('/addrooms', methods=['GET', 'POST'])
+def room():
+    if request.method == 'POST':
+        room_num = request.form['roomnum']
+        if Rooms_DB.query.filter_by(room_number = room_num).count() > 0:
+            flash('Room already exists in database')
+        else:
+            room = Rooms_DB(room_num, 0)
+            db.session.add(room)
+            db.session.commit()
+            flash("Room was successfully added to database")
+        
+        return redirect(url_for('show_waiting'))
+    else:
+        return render_template('add_rooms.html')
+
 @app.route('/', methods=['GET', 'POST'])
 def show_waiting():
     if request.method == 'POST':
         if request.form.get('ready_button') == 'Ready':
             if WaitingQueue.is_empty():
                 flash('Queue is empty!')
+            elif Rooms_DB.query.filter_by(room_status = 0).count() == 0:
+                flash('No Rooms Available')
             else:
                 patient = WaitingQueue.remove_patient()
                 ReadyQueue.add_patient(patient)
                 Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(status = 1))
+                room = Rooms_DB.query.filter_by(room_status = 0).first()
+                Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(room = room.room_number))
+                Rooms_DB.query.filter_by(room_number = room.room_number).update(dict(room_status = 1))
                 Patients_DB.query.filter_by(status = 0).update(dict(position = Patients_DB.position - 1))
-                Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = ReadyQueue.get_pos(patient.getPatientID())))
+                Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = 0))
                 db.session.commit()
         
         if request.form.get('pos') == '+':
@@ -130,7 +150,7 @@ def show_waiting():
                         Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = WaitingQueue.get_pos(patient.getPatientID())))
                         db.session.commit()
     
-    return render_template('show_queues.html', waiting_patients = waiting(), ready_patients = ready())
+    return render_template('show_queues.html', waiting_patients = waiting(), ready_patients = ready(), rooms = get_rooms())
 
 def waiting():
     waiting_patients = Patients_DB.query.filter_by(status = 0).order_by(Patients_DB.position)
@@ -152,6 +172,9 @@ def checked_out():
     checked_out_patients = Patients_DB.query.filter_by(status = 4).all()
     return checked_out_patients
     
+def get_rooms():
+    rooms = Rooms_DB.query.filter_by(room_status = 0).all()
+    return rooms
 
 if __name__ == '__main__':
     with app.app_context():

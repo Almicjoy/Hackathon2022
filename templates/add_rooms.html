@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <h1>Patient Registration Form</h1>
+        <h1>Hospital Room Form</h1>
         <title>Schedule Appointment</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/bootstrap.css') }}">
@@ -16,11 +16,9 @@
                 {{ message }}
             </div>
         {%- endfor %}
-        <form name="Scheduler" method="POST" id="info" action="{{ request.path }}">
+        <form name="room_info" method="POST" id="room" action="{{ request.path }}">
                 <table>
-                    <tr><td> First Name: </td> <td><input type="text" id="fname" name="fname" placeholder="First Name" fName="" required></td></tr>
-                    <tr><td> Last Name: </td><td><input type="text" id="lname" name="lname" placeholder="Last Name" lName="" required></td></tr>
-                    <tr><td> Patient ID: </td><td><input type="text" id="id" name="id" ID="" required></td></tr>
+                    <tr><td> Room Number: </td> <td><input type="text" id="roomnum" name="roomnum" placeholder="0000" room_number="" required></td></tr>
                 </table>
                 <input type="submit" value="Submit"/>
             
