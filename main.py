@@ -119,7 +119,6 @@ def show_waiting():
                 flash('No Rooms Available')
             else:
                 patient = WaitingQueue.remove_patient()
-                ReadyQueue.add_patient(patient)
                 Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(status = 1))
                 room = Rooms_DB.query.filter_by(room_status = 0).first()
                 Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(room = room.room_number))
@@ -149,7 +148,12 @@ def show_waiting():
                     for patient in WaitingQueue.patient_list:
                         Patients_DB.query.filter_by(id = patient.getPatientID()).update(dict(position = WaitingQueue.get_pos(patient.getPatientID())))
                         db.session.commit()
-    
+
+    if WaitingQueue.is_empty():
+        waiting_patients = waiting()
+        for waiting_patient in waiting_patients:
+            p = Patient.Patient(waiting_patient.fname, waiting_patient.lname, waiting_patient.id, waiting_patient.status)
+            WaitingQueue.add_patient(p)
     return render_template('show_queues.html', waiting_patients = waiting(), ready_patients = ready(), rooms = get_rooms())
 
 def waiting():
